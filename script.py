@@ -20,7 +20,7 @@ def main():
     for obj in Config.cellList:
         obj.Brain()
     pyg.display.flip()
-    print(Config.leftExecutionCount, len(Config.cellList))
+    #print(Config.leftExecutionCount, len(Config.cellList))
 
     # return()
 

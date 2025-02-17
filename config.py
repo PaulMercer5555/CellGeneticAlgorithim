@@ -4,7 +4,7 @@ import math
 class Config:
     # region Simulation Configuration
     screenSize = 100
-    tickPerSec = 60
+    tickPerSec = 2
     simulationScale = 1
     leftCount = 0
     leftExecutionCount = 0
@@ -18,8 +18,8 @@ class Config:
     cellVisionRadius = 3
     cellStartingEnergy = 10
     energyLossPerTick = 1
-    cellCoordinateWeightScaler = 150
-    cellEnergyWeightScaler = 50
+    cellCoordinateWeightScaler = 300
+    cellEnergyWeightScaler = 200
     # endregion
 
     # region Food Configuration

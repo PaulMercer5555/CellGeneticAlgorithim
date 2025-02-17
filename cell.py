@@ -58,25 +58,19 @@ class Cell:
     # endregion
 
     def Move(self,direction):
+        print(direction)
+        (x,y) = self.coordinates
         if direction == "UP":
-            y = list(self.coordinates)
-            y[1] += Config.simulationScale
-            self.coordinates = tuple(y)
+            y += Config.simulationScale
         elif direction == "DOWN":
-            y = list(self.coordinates)
-            y[1] -= Config.simulationScale
-            self.coordinates = tuple(y)
+            y -= Config.simulationScale
         elif direction == "LEFT":
-            x = list(self.coordinates)
-            x[0] -= Config.simulationScale
-            self.coordinates = tuple(x)
+            x -= Config.simulationScale
             Config.leftExecutionCount += 1
         elif direction == "RIGHT":
-            x = list(self.coordinates)
-            x[0] += Config.simulationScale
-            self.coordinates = tuple(x)
-
-        return
+            x += Config.simulationScale
+        print(self.coordinates,(x,y), "MOVE")
+        self.coordinates = (x,y)
 
     def decisionMaker(self):
         gene1Output = self.weight + self.genes["gene1"]
@@ -85,20 +79,20 @@ class Cell:
         gene4Output = self.weight + self.genes["gene4"]
 
         totalOutput = gene1Output + gene2Output + gene3Output + gene4Output
-        #print(totalOutput)
-
-        if totalOutput > 0:
-            if totalOutput < 50:
-                self.Move("UP")
-            elif totalOutput < 100:
-                self.Move("DOWN")
-        else:
-            #if totalOutput > -50:
-            #    self.Move("LEFT")
-            #    Config.leftCount += 1
-            if totalOutput > -100:
-                self.Move("RIGHT")
-        return
+        direction = "direction"
+        if -100 < totalOutput < -50:
+            direction = "LEFT"
+            self.Move(direction)
+        elif -50 < totalOutput < 0:
+            direction = "RIGHT"
+            self.Move(direction)
+        elif 0 < totalOutput < 50:
+            direction = "UP"
+            self.Move(direction)
+        elif 50 < totalOutput < 100:
+            direction = "DOWN"
+            self.Move(direction)
+        print(self.coordinates, "DECISIONMAKER", direction, totalOutput)
 
     # region Input Functions
     def visualInput(self,foodList,cellList):
@@ -120,8 +114,8 @@ class Cell:
     def selfCoordinatesToWeight(self):
         coordinates = self.coordinates
         weight = 0
-        weight += coordinates[0]
-        weight += coordinates[1]
+        weight += coordinates[0]/Config.cellCoordinateWeightScaler
+        weight += coordinates[1]/Config.cellCoordinateWeightScaler
         return (weight)
 
     def energyLevelToWeight(self):
@@ -136,6 +130,7 @@ class Cell:
             x = list(self.coordinates)
             x[0] += Config.screenSize
             self.coordinates = tuple(x)
+
         for obj1 in Config.foodList:
             if self.coordinates == obj1.coordinates:
                 self.eatFood(obj1)
@@ -163,5 +158,6 @@ class Cell:
         self.decisionMaker()
 
         self.loseEnergy(Config.energyLossPerTick)
+        print(self.coordinates, "BRAIN")
 
 
